@@ -1,0 +1,151 @@
+@font-face {
+    font-family: "materials-project";
+    src: url(/assets/webfonts/materials-project.woff);
+    font-weight: normal;
+    font-style: normal
+}
+
+[data-icon]:before {
+    font-family: "materials-project" !important;
+    content: attr(data-icon);
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-variant: normal !important;
+    text-transform: none !important;
+    speak: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+[class^=icon-]:before,[class*=" icon-"]:before {
+    font-family: "materials-project" !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-variant: normal !important;
+    text-transform: none !important;
+    speak: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+.icon-fantastic-loading:before {
+    content: "a"
+}
+
+.icon-fontastic-toolkit:before {
+    content: "b"
+}
+
+.icon-fontastic-phase-diagram:before {
+    content: "c"
+}
+
+.icon-fontastic-pourbaix-diagram:before {
+    content: "d"
+}
+
+.icon-fontastic-nanoporous:before {
+    content: "e"
+}
+
+.icon-fontastic-battery:before {
+    content: "f"
+}
+
+.icon-fontastic-search:before {
+    content: "g"
+}
+
+.icon-fontastic-reaction:before {
+    content: "h"
+}
+
+.icon-fontastic-thermo:before {
+    content: "i"
+}
+
+.icon-fontastic-molecules:before {
+    content: "j"
+}
+
+.icon-fontastic-compare:before {
+    content: "k"
+}
+
+.icon-fontastic-rfb:before {
+    content: "l"
+}
+
+.icon-fontastic-struct-predictor:before {
+    content: "m"
+}
+
+.icon-fontastic-xas:before {
+    content: "n"
+}
+
+.icon-fontastic-interface:before {
+    content: "o"
+}
+
+.icon-fontastic-alloy:before {
+    content: "p"
+}
+
+.icon-fontastic-magnetism:before {
+    content: "q"
+}
+
+.icon-fontastic-dashboard:before {
+    content: "r"
+}
+
+.icon-fontastic-docs:before {
+    content: "s"
+}
+
+.icon-fantastic-forum:before {
+    content: "t"
+}
+
+.icon-fontastic-apps:before {
+    content: "u"
+}
+
+.icon-fontastic-rad:before {
+    content: "w"
+}
+
+.icon-fontastic-synthesis-2:before {
+    content: "x"
+}
+
+.icon-fontastic-contribs:before {
+    content: "y"
+}
+
+.icon-fontastic-periodic-table-squares:before {
+    content: "v"
+}
+
+.icon-fontastic-periodic-table-solid:before {
+    content: "z"
+}
+
+.icon-fontastic-catalysis:before {
+    content: "A"
+}
+
+.icon-fontastic-cakematgen:before {
+    content: "B"
+}
+
+.icon-fontastic-synthesis:before {
+    content: "C"
+}
+
+.icon-fontastic-qmof:before {
+    content: "D"
+}
