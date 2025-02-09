@@ -7,41 +7,43 @@ APP_SECTIONS = [
     {
         "name": "Apps Overview",
         "items": [
-            {"icon": "fas fa-atom", "label": "Apps Overview", "href": "/apps"},
+            {"icon": "icon-fontastic-apps", "label": "Apps Overview", "href": "/apps"},
         ]
     },
     {
         "name": "EXPLORE AND SEARCH",
         "items": [
-            {"icon": "fas fa-search", "label": "Materials Explorer", "href": "/apps/materials/explorer"},
-            {"icon": "fas fa-atom", "label": "Molecules Explorer", "href": "/apps/molecules/explorer"},
-            {"icon": "fas fa-atom", "label": "JCESR Molecules", "href": "/apps/molecules/jcesr"},
-            {"icon": "fas fa-battery-full", "label": "Battery Explorer", "href": "/apps/battery/explorer"},
-            {"icon": "fas fa-mortar-pestle", "label": "Synthesis Explorer", "href": "/apps/synthesis"},
-            {"icon": "fas fa-microscope", "label": "Catalysis Explorer", "href": "/apps/catalysis"},
-            {"icon": "fas fa-cube", "label": "MOF Explorer", "href": "/apps/mof"},
+            {"icon": "icon-fontastic-search", "label": "Materials Explorer", "href": "/apps/materials/explorer"},
+            {"icon": "icon-fontastic-molecules", "label": "Molecules Explorer", "href": "/apps/molecules/explorer"},
+            {"icon": "icon-fontastic-molecules", "label": "JCESR Molecules", "href": "/apps/molecules/jcesr"},
+            {"icon": "icon-fontastic-battery", "label": "Battery Explorer", "href": "/apps/battery/explorer"},
+            {"icon": "icon-fontastic-synthesis", "label": "Synthesis Explorer", "href": "/apps/synthesis"},
+            {"icon": "icon-fontastic-catalysis", "label": "Catalysis Explorer", "href": "/apps/catalysis"},
+            {"icon": "icon-fontastic-qmof", "label": "MOF Explorer", "href": "/apps/mof"},
         ]
     },
+
     {
         "name": "ANALYSIS TOOLS",
         "items": [
-            {"icon": "fas fa-chart-area", "label": "Phase Diagram", "href": "/apps/analysis/phase"},
-            {"icon": "fas fa-chart-line", "label": "Pourbaix Diagram", "href": "/apps/analysis/pourbaix"},
-            {"icon": "fas fa-cubes", "label": "Crystal Toolkit", "href": "/apps/analysis/crystal"},
-            {"icon": "fas fa-flask", "label": "Reaction Calculator", "href": "/apps/reaction"},
-            {"icon": "fas fa-project-diagram", "label": "Interface Reactions", "href": "/apps/interface"},
+            {"icon": "icon-fontastic-phase-diagram", "label": "Phase Diagram", "href": "/apps/analysis/phase"},
+            {"icon": "icon-fontastic-pourbaix-diagram", "label": "Pourbaix Diagram", "href": "/apps/analysis/pourbaix"},
+            {"icon": "icon-fontastic-toolkit", "label": "Crystal Toolkit", "href": "/apps/analysis/crystal"},
+            {"icon": "icon-fontastic-reaction", "label": "Reaction Calculator", "href": "/apps/reaction"},
+            {"icon": "icon-fontastic-interface", "label": "Interface Reactions", "href": "/apps/interface"},
         ]
     },
     {
         "name": "CHARACTERIZATION",
         "items": [
-            {"icon": "fas fa-wave-square", "label": "X-ray Absorption Spectra", "href": "/apps/xas"},
+            {"icon": "icon-fontastic-xas", "label": "X-ray Absorption Spectra", "href": "/apps/xas"},
         ]
+
     },
     {
         "name": "CONTRIBUTED DATA",
         "items": [
-            {"icon": "fas fa-database", "label": "MPContribs Explorer", "href": "/apps/mpcontribs"},
+            {"icon": "icon-fontastic-contribs", "label": "MPContribs Explorer", "href": "/apps/mpcontribs"},
             {"icon": "fas fa-table", "label": "GNoME Explorer", "href": "/apps/gnome"},
             {"icon": "fas fa-puzzle-piece", "label": "Contributed Apps", "href": "/apps/contributed"},
         ]

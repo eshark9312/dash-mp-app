@@ -10,9 +10,10 @@ app = dash.Dash(__name__,
                     dbc.themes.BOOTSTRAP,
                     "/assets/css/bulma.css",     # Base styles
                     "/assets/css/styles.css",     # Our custom styles (overrides)
-                    "/assets/css/all.min.css"     # Font Awesome
+                    "/assets/css/all.min.css",     # Font Awesome
+                    "/assets/css/materials_project_icons.css"     # Materials Project Icons
                 ],
-                use_pages=True)
+                use_pages=True, prevent_initial_callbacks=True)
 
 # Set the favicon
 app.title = "Materials Project"

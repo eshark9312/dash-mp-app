@@ -4403,7 +4403,9 @@
   
   .field.has-addons {
     display: flex;
-    justify-content: flex-start
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
   }
   
   .field.has-addons .control:not(:last-child) {
