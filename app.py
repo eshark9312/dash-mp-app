@@ -1,10 +1,16 @@
 import dash
-from dash import html, dcc
+from dash import html, dcc, callback
 import dash_bootstrap_components as dbc
+from dash.dependencies import Input, Output
+from components.left_navbar import create_left_navbar
 
 # Initialize the Dash app with use_pages=True
 app = dash.Dash(__name__, 
-                external_stylesheets=[dbc.themes.BOOTSTRAP],
+                external_stylesheets=[
+                    dbc.themes.BOOTSTRAP,
+                    "/assets/css/styles.css",
+                    "/assets/css/all.min.css"  # Local Font Awesome instead of CDN
+                ],
                 use_pages=True)
 
 # Set the favicon
@@ -19,31 +25,49 @@ navbar = dbc.NavbarSimple(
                 className="me-2"
             ),
             "The Materials Project"
-        ], style={'display': 'flex', 'alignItems': 'center'}),
+        ], className="brand", style={'display': 'flex', 'alignItems': 'center'}),
         brand_href="/",
         color="dark",
         dark=True,
-        className="mb-0",
+        className="mb-0 navbar",
         fluid=True,
         style={'paddingLeft': '50px', 'paddingRight': '50px', 'width': '100%'},
         children=[
-            dbc.NavItem(dbc.NavLink("Home", href="/")),
-            dbc.NavItem(dbc.NavLink("Apps", href="/apps")),
-            dbc.NavItem(dbc.NavLink("About", href="/about")),
-            dbc.NavItem(dbc.NavLink("Community", href="/community")),
-            dbc.NavItem(dbc.NavLink("ML", href="/ml")),
-            dbc.NavItem(dbc.NavLink("API", href="/api")),
+            dbc.NavItem(dbc.NavLink("Home", href="/", className="nav-link")),
+            dbc.NavItem(dbc.NavLink("Apps", href="/apps", className="nav-link")),
+            dbc.NavItem(dbc.NavLink("About", href="/about", className="nav-link")),
+            dbc.NavItem(dbc.NavLink("Community", href="/community", className="nav-link")),
+            dbc.NavItem(dbc.NavLink("ML", href="/ml", className="nav-link")),
+            dbc.NavItem(dbc.NavLink("API", href="/api", className="nav-link")),
         ],
     )
     
 
 # Define the layout of the app
 app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),  # Add Location component
     # Top Navbar
     navbar,
-    # Page content
-    dash.page_container
+    # Content wrapper
+    html.Div([
+        # Left Navbar container
+        html.Div(id='left-navbar-container'),
+        # Page content
+        html.Div(
+            dash.page_container,
+        )
+    ], className="content-wrapper"),
 ], style={'padding': '0', 'margin': '0', 'width': '100%', 'height': '100vh'})
+
+# Callback to show/hide left navbar based on URL
+@callback(
+    Output('left-navbar-container', 'children'),
+    Input('url', 'pathname')
+)
+def toggle_left_navbar(pathname):
+    if pathname == '/' or pathname == '':
+        return None
+    return create_left_navbar()
 
 # Run the app
 if __name__ == '__main__':
