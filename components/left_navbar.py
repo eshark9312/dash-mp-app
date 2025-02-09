@@ -12,12 +12,11 @@ APP_SECTIONS = [
     },
     {
         "name": "EXPLORE AND SEARCH",
-
         "items": [
-            {"icon": "fas fa-search", "label": "Materials Explorer", "href": "/apps/materials"},
-            {"icon": "fas fa-atom", "label": "Molecules Explorer", "href": "/apps/molecules"},
-            {"icon": "fas fa-atom", "label": "JCESR Molecules", "href": "/apps/jcesr"},
-            {"icon": "fas fa-battery-full", "label": "Battery Explorer", "href": "/apps/battery"},
+            {"icon": "fas fa-search", "label": "Materials Explorer", "href": "/apps/materials/explorer"},
+            {"icon": "fas fa-atom", "label": "Molecules Explorer", "href": "/apps/molecules/explorer"},
+            {"icon": "fas fa-atom", "label": "JCESR Molecules", "href": "/apps/molecules/jcesr"},
+            {"icon": "fas fa-battery-full", "label": "Battery Explorer", "href": "/apps/battery/explorer"},
             {"icon": "fas fa-mortar-pestle", "label": "Synthesis Explorer", "href": "/apps/synthesis"},
             {"icon": "fas fa-microscope", "label": "Catalysis Explorer", "href": "/apps/catalysis"},
             {"icon": "fas fa-cube", "label": "MOF Explorer", "href": "/apps/mof"},
@@ -26,9 +25,9 @@ APP_SECTIONS = [
     {
         "name": "ANALYSIS TOOLS",
         "items": [
-            {"icon": "fas fa-chart-area", "label": "Phase Diagram", "href": "/apps/phase"},
-            {"icon": "fas fa-chart-line", "label": "Pourbaix Diagram", "href": "/apps/pourbaix"},
-            {"icon": "fas fa-cubes", "label": "Crystal Toolkit", "href": "/apps/crystal"},
+            {"icon": "fas fa-chart-area", "label": "Phase Diagram", "href": "/apps/analysis/phase"},
+            {"icon": "fas fa-chart-line", "label": "Pourbaix Diagram", "href": "/apps/analysis/pourbaix"},
+            {"icon": "fas fa-cubes", "label": "Crystal Toolkit", "href": "/apps/analysis/crystal"},
             {"icon": "fas fa-flask", "label": "Reaction Calculator", "href": "/apps/reaction"},
             {"icon": "fas fa-project-diagram", "label": "Interface Reactions", "href": "/apps/interface"},
         ]

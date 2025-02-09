@@ -1,3 +1,4 @@
+/* Navigation styles */
 .nav-link {
     text-decoration: none; /* Remove default underline */
     color: white; /* Change color to match your theme */
@@ -8,7 +9,11 @@
 }
 
 .navbar {
-    position: relative; /* Position relative for the pseudo-element */
+    position: sticky !important;  /* Override any other position settings */
+    top: 0;
+    z-index: 1100;  /* Higher than left navbar to stay on top */
+    background-color: #343a40;  /* Match dark theme */
+    height: 56px;
 }
 
 .navbar .nav-link {
@@ -36,6 +41,7 @@
     transform: scaleX(1); /* Show the line on hover */
 }
 
+/* Brand styles */
 .brand {
     position: relative; /* Position relative for the pseudo-element */
     display: inline-block; /* Ensure it behaves like a block for the pseudo-element */
@@ -56,24 +62,25 @@
     transform: scaleX(1); /* Show the line on hover */
 }
 
-/* Content wrapper */
+/* Layout styles */
 .content-wrapper {
     display: relative;
     height: calc(100vh - 56px); /* Subtract navbar height */
+    margin-top: 0;  /* Remove any margin since navbar is sticky */
 }
 
 /* Left navbar styles */
 .left-navbar {
-    position: absolute;
-    top: 56px;
+    position: fixed;
+    top: 56px;  /* Match navbar height */
     left: 0;
-    z-index: 1000;
+    z-index: 1000;  /* Below top navbar */
     width: 60px;
     background-color: #2c3e50;
     transition: width 0.3s ease;
     overflow: hidden;
     border-right: 1px solid #394b5f;
-    height: 100vh;
+    height: calc(100vh - 56px);  /* Subtract navbar height */
 }
 
 .left-navbar:hover {
@@ -129,6 +136,7 @@
     font-size: 1rem;
 }
 
+/* Text visibility */
 .nav-text {
     opacity: 0;
     transition: opacity 0.2s ease;
@@ -138,6 +146,12 @@
     opacity: 1;
 }
 
+/* Content area */
 .main-content {
     padding-left: 60px;
+}
+
+.app-content {
+    padding-left: calc(60px + 0.5rem);
+    padding-right: 0.5rem;
 }

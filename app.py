@@ -8,8 +8,9 @@ from components.left_navbar import create_left_navbar
 app = dash.Dash(__name__, 
                 external_stylesheets=[
                     dbc.themes.BOOTSTRAP,
-                    "/assets/css/styles.css",
-                    "/assets/css/all.min.css"  # Local Font Awesome instead of CDN
+                    "/assets/css/bulma.css",     # Base styles
+                    "/assets/css/styles.css",     # Our custom styles (overrides)
+                    "/assets/css/all.min.css"     # Font Awesome
                 ],
                 use_pages=True)
 
@@ -21,7 +22,7 @@ navbar = dbc.NavbarSimple(
         brand=html.Div([
             html.Img(
                 src="/assets/img/mp_color.png",
-                height="30px",
+                style={'height': '30px'},
                 className="me-2"
             ),
             "The Materials Project"
@@ -31,6 +32,7 @@ navbar = dbc.NavbarSimple(
         dark=True,
         className="mb-0 navbar",
         fluid=True,
+        sticky="top",
         style={'paddingLeft': '50px', 'paddingRight': '50px', 'width': '100%'},
         children=[
             dbc.NavItem(dbc.NavLink("Home", href="/", className="nav-link")),
