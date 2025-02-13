@@ -9,7 +9,7 @@ from dash.dependencies import Input, Output, State
 from components.app_header import create_app_header
 dash.register_page(
     __name__,
-    path='/apps/materials/explorer',
+    path='/apps/materials',
     title='Materials Explorer - Materials Project',
     name='Materials Explorer'
 )

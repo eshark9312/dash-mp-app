@@ -3,21 +3,8 @@ from dash import html, dcc, callback
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 from components.left_navbar import create_left_navbar
-
-# Initialize the Dash app with use_pages=True
-app = dash.Dash(__name__, 
-                external_stylesheets=[
-                    dbc.themes.BOOTSTRAP,
-                    "/assets/css/bulma.css",     # Base styles
-                    "/assets/css/styles.css",     # Our custom styles (overrides)
-                    "/assets/css/all.min.css",     # Font Awesome
-                    "/assets/css/materials_project_icons.css"     # Materials Project Icons
-                ],
-                use_pages=True, prevent_initial_callbacks=True)
-
-# Set the favicon
-app.title = "Materials Project"
-app._favicon = "/assets/img/favicon.ico"  # Use this instead of index_string
+import crystal_toolkit.components as ctc
+import crystal_toolkit.core as ctcore
 
 navbar = dbc.NavbarSimple(
         brand=html.Div([
@@ -44,10 +31,9 @@ navbar = dbc.NavbarSimple(
             dbc.NavItem(dbc.NavLink("API", href="/api", className="nav-link")),
         ],
     )
-    
 
 # Define the layout of the app
-app.layout = html.Div([
+layout = html.Div([
     dcc.Location(id='url', refresh=False),  # Add Location component
     # Top Navbar
     navbar,
@@ -62,6 +48,23 @@ app.layout = html.Div([
     ], className="content-wrapper"),
 ], style={'padding': '0', 'margin': '0', 'width': '100%', 'height': '100vh'})
 
+# Initialize the Dash app with use_pages=True
+app = dash.Dash(__name__, 
+                external_stylesheets=[
+                    dbc.themes.BOOTSTRAP,
+                    "/assets/css/bulma.css",     # Base styles
+                    "/assets/css/styles.css",     # Our custom styles (overrides)
+                    "/assets/css/all.min.css",     # Font Awesome
+                    "/assets/css/materials_project_icons.css",     # Materials Project Icons
+                    "/assets/css/scrollspy.css"     # Scrollspy
+                ],
+                use_pages=True, prevent_initial_callbacks=True,
+                )
+
+# Set the favicon
+app.title = "Materials Project"
+app._favicon = "/assets/img/favicon.ico"  
+app.layout = layout
 # Callback to show/hide left navbar based on URL
 @callback(
     Output('left-navbar-container', 'children'),

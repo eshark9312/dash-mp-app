@@ -13,7 +13,7 @@ APP_SECTIONS = [
     {
         "name": "EXPLORE AND SEARCH",
         "items": [
-            {"icon": "icon-fontastic-search", "label": "Materials Explorer", "href": "/apps/materials/explorer"},
+            {"icon": "icon-fontastic-search", "label": "Materials Explorer", "href": "/apps/materials"},
             {"icon": "icon-fontastic-molecules", "label": "Molecules Explorer", "href": "/apps/molecules/explorer"},
             {"icon": "icon-fontastic-molecules", "label": "JCESR Molecules", "href": "/apps/molecules/jcesr"},
             {"icon": "icon-fontastic-battery", "label": "Battery Explorer", "href": "/apps/battery/explorer"},
