@@ -3,8 +3,6 @@ from dash import html, dcc, callback
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 from components.left_navbar import create_left_navbar
-import crystal_toolkit.components as ctc
-import crystal_toolkit.core as ctcore
 
 navbar = dbc.NavbarSimple(
         brand=html.Div([
@@ -35,6 +33,7 @@ navbar = dbc.NavbarSimple(
 # Define the layout of the app
 layout = html.Div([
     dcc.Location(id='url', refresh=False),  # Add Location component
+    dcc.Store(id='_crystal-toolkit-layout', data=False),
     # Top Navbar
     navbar,
     # Content wrapper

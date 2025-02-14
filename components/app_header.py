@@ -20,9 +20,8 @@ def create_breadcrumb(items):
             style={
                 "marginLeft": "2.5rem", 
                 "marginTop": "1rem"
-            }
+            },
         )
-
     ], className="breadcrumb-nav")
 
 def create_page_header(title, icon_class="fas fa-cube", show_references=True, show_documentation=True):
