@@ -8,8 +8,16 @@
     text-decoration: underline; /* Add underline on hover */
 }
 
+.top-navbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1050 !important;
+    width: 100% !important;
+}
+
 .navbar {
-    position: sticky !important;  /* Override any other position settings */
     top: 0;
     z-index: 1100;  /* Higher than left navbar to stay on top */
     background-color: #343a40;  /* Match dark theme */

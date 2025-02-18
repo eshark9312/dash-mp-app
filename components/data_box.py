@@ -31,11 +31,18 @@ class DataBox(html.Div):
         # Add title if provided
         children = []
         if title:
-            children.append(html.H5(title, className="data-box-title mb-3", style={
-                'color': '#666666',
-                'borderBottom': '1px dotted #666666',
-                'paddingBottom': '0.5rem'
-            }))
+            children.append(html.Div([
+                html.Span(
+                    title,
+                    style={
+                        'color': '#666666',
+                        'borderBottom': '1px dotted #666666',
+                        'paddingBottom': '0.2rem',
+                        'display': 'inline-block',
+                        'fontSize': '1rem'
+                    }
+                )
+            ], className="data-box-title mb-3"))
         children.append(table)
 
         # Wrap in Card component
@@ -59,7 +66,6 @@ class DataBox(html.Div):
 
     def _create_key_value_variant(self, data: Dict[str, str]) -> html.Table:
         """Create a key-value pair table."""
-        print("key-value variant")
         rows = []
         for key, value in data.items():
             rows.append(
@@ -67,10 +73,10 @@ class DataBox(html.Div):
                     html.Th(
                         key,
                         style={
-                            'fontWeight': '500',
+                            'fontWeight': '800',
                             'color': '#333333',
                             'borderBottom': '1px solid #eee',
-                            'padding': '0.75rem 2rem 0.75rem 0',
+                            'padding': '0.4rem 2rem 0.4rem 0',
                             'width': '50%'
                         }
                     ),
@@ -80,7 +86,7 @@ class DataBox(html.Div):
                             'color': '#485fc7',
                             'fontFamily': 'monospace',
                             'borderBottom': '1px solid #eee',
-                            'padding': '0.75rem 0',
+                            'padding': '0.4rem 0',
                             'width': '50%'
                         }
                     )
@@ -98,7 +104,6 @@ class DataBox(html.Div):
     def _create_table_variant(self, data: List[Dict[str, str]]) -> html.Table:
         """Create a table with headers from a list of dictionaries."""
         # Get headers from the first dictionary
-        print('table variant')
         headers = list(data[0].keys())
         
         # Create header row
@@ -106,12 +111,10 @@ class DataBox(html.Div):
             html.Th(
                 header,
                 style={
-                    'fontWeight': '600',
-                    'color': '#333333',
+                    'fontWeight': '800',
                     'borderBottom': '2px solid #ddd',
                     'padding': '0.75rem 1rem',
                     'textAlign': 'left',
-                    'backgroundColor': '#f8f9fa'
                 }
             ) for header in headers
         ])
@@ -126,7 +129,7 @@ class DataBox(html.Div):
                         'color': '#485fc7',
                         'fontFamily': 'monospace',
                         'borderBottom': '1px solid #eee',
-                        'padding': '0.75rem 1rem'
+                        'padding': '0.4rem 1rem'
                     }
                 ) for header in headers
             ])

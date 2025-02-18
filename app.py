@@ -16,9 +16,9 @@ navbar = dbc.NavbarSimple(
         brand_href="/",
         color="dark",
         dark=True,
-        className="mb-0 navbar",
+        className="mb-0 navbar top-navbar",
         fluid=True,
-        sticky="top",
+        fixed="top",
         style={'paddingLeft': '50px', 'paddingRight': '50px', 'width': '100%'},
         children=[
             dbc.NavItem(dbc.NavLink("Home", href="/", className="nav-link")),
@@ -43,6 +43,7 @@ layout = html.Div([
         # Page content
         html.Div(
             dash.page_container,
+            style={"paddingTop": "56px"}
         )
     ], className="content-wrapper"),
 ], style={'padding': '0', 'margin': '0', 'width': '100%', 'height': '100vh'})

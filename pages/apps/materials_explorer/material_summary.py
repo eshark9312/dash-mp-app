@@ -67,7 +67,6 @@ app_header = html.Div([
     ])
 
 scrollspy_layout = html.Div(className='scrollspy app-content', children=[
-    # html.H1(material_summary.get("formula_pretty"), className="mb-4 menu-label"),
     dash_mp_components.Scrollspy(
         menuGroups=[{'label': 'Table of Contents', 
                      'items': [
@@ -83,7 +82,7 @@ scrollspy_layout = html.Div(className='scrollspy app-content', children=[
         Columns([
             Column([structure_viewer_layout]),
             Column([
-                html.Div(id="summary_box"),
+                html.Div(id="summary_box", className="mb-3"),
                 dash_mp_components.DataBlock(
                     id="robocrys_box",
                     className='box',
@@ -100,13 +99,12 @@ scrollspy_layout = html.Div(className='scrollspy app-content', children=[
         ]),
         Columns([
             Column([
-                html.Div(id='three'),
-                html.Div(id="lattice_constants"),
-                html.Div(id="symmetry_details"),
+                html.Div(id="lattice_constants", className="mb-3"),
+                html.Div(id="symmetry_details", className="mb-3"),
             ]),
             Column([
-                html.Div(id="atomic_positions"),
-                html.Div(id="more_details"),
+                html.Div(id="atomic_positions", className="mb-3"),
+                html.Div(id="more_details", className="mb-3"),
             ]),
             ]),
         html.Div(id='two', children=[
@@ -148,8 +146,9 @@ def generate_lattice_constants_box(lattice_data):
         'α': f"{lattice_data['alpha']:.2f} º",
         'β': f"{lattice_data['beta']:.2f} º",
         'ɣ': f"{lattice_data['gamma']:.2f} º",
+        'Volume': f"{lattice_data['volume']:.2f} Å³",
     }
-    return DataBox(data=lattice_constants).children
+    return DataBox(title="Lattice", data=lattice_constants).children
 
 def generate_summary_box(mpr_response):
     magnetic_ordering = {
@@ -166,7 +165,7 @@ def generate_summary_box(mpr_response):
       'Total Magnetization': f"{mpr_response.get('total_magnetization'):.2f} µB/f.u.",
       'Experimentally Observed': 'No' if mpr_response.get('theoretical') else 'Yes',
     }
-    return DataBox(title="Lattice", data=summary_data).children
+    return DataBox(data=summary_data).children
 
 def generate_symmetry_box(sym_data):
     return DataBox(title="Symmetry", data=sym_data).children
