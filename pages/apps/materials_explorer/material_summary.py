@@ -3,6 +3,7 @@ import dash
 from dash import dcc, html, Input, Output, callback
 from components.app_header import create_page_header
 from components.data_box import DataBox
+from components.utility_functions import format_formula_charge
 import dash_bootstrap_components as dbc
 import requests
 import crystal_toolkit.components as ctc
@@ -66,8 +67,7 @@ app_header = html.Div([
         html.Div([breadcrumb, page_header], className="app-content")
     ])
 
-scrollspy_layout = html.Div(className='scrollspy app-content', children=[
-    dash_mp_components.Scrollspy(
+scrollspy_menu = dash_mp_components.Scrollspy(
         menuGroups=[{'label': 'Table of Contents', 
                      'items': [
                          {'label': 'Summary', 'targetId': 'summary_box'}, 
@@ -76,8 +76,14 @@ scrollspy_layout = html.Div(className='scrollspy app-content', children=[
         menuClassName="menu",
         menuItemContainerClassName="menu-list",
         activeClassName="is-active",
-        offset=50
-    ),
+        offset=-100,
+    )
+
+scrollspy_layout = html.Div(className='scrollspy app-content', children=[
+    html.Div(className='menu', children=[
+            html.Div(className='mb-3', id='scrollspy_menu_title'),
+            scrollspy_menu
+        ]),
     html.Div(className='content', children=[
         Columns([
             Column([structure_viewer_layout]),
@@ -101,6 +107,7 @@ scrollspy_layout = html.Div(className='scrollspy app-content', children=[
             Column([
                 html.Div(id="lattice_constants", className="mb-3"),
                 html.Div(id="symmetry_details", className="mb-3"),
+                html.Div(id="chem_env", className="mb-3"),
             ]),
             Column([
                 html.Div(id="atomic_positions", className="mb-3"),
@@ -173,6 +180,34 @@ def generate_symmetry_box(sym_data):
 def generate_atomic_posistions_box(wyckoff_sites_data):
     return DataBox(title="Atomic Positions", data=wyckoff_sites_data).children
 
+def generate_scrollspy_menu_title(mp_id, formula_pretty):
+    return [
+        dash_mp_components.DataBlock(
+           columns=[
+              {
+                 'selector': "sample",
+                 'formatType': 'FORMULA',
+              }
+           ],
+           data={
+              "sample": formula_pretty
+           }
+        ),
+        html.Span(mp_id, style={"fontSize":"1.5rem", "fontWeight": 400}), 
+        ]
+
+def generate_chemical_environment(chem_env_data):
+    chem_env_table = []
+    for ce in chem_env_data:
+        chem_env_table.append({
+                "Wyckoff": ce['Wyckoff'],
+                "Species": ce['Species'],
+                "Environment": ce['Environment'],
+                "IUPAC": ce['IUPAC'],
+                "CSM": ce['CSM'],
+        })
+    return DataBox(title="Chemical Environment", data=chem_env_table).children
+
 @callback(
     Output(structure_viewer.id(), 'data'),
     Output('_breadcrumb_explorer', 'items'),
@@ -181,6 +216,9 @@ def generate_atomic_posistions_box(wyckoff_sites_data):
     Output('lattice_constants', 'children'),
     Output('symmetry_details', 'children'),
     Output('atomic_positions', 'children'),
+    Output('more_details', 'children'),
+    Output('scrollspy_menu_title', 'children'),
+    Output('chem_env', 'children'),
     Input('url', 'pathname'),
     Input('url', 'search')
 )
@@ -188,7 +226,6 @@ def update_structure(pathname, search):
     query_params = get_url_query_params(search)
     material_id = urlparse(pathname).path.split('/')[-1]
     material_summary = get_material_summary(material_id)
-    print(material_id)
     breadcrumb_items = [
         {"label": "Home", "href": "/", "external_link": True},
         {"label": "Apps", "href": "/apps", "external_link": True},
@@ -197,7 +234,14 @@ def update_structure(pathname, search):
     ]
     robocrys_block_data = material_summary["description"]
     robocrys_block_data['title'] = "Description"
-    
+
+    more_details_block = DataBox(data = {
+        "Number of Atoms": material_summary["nsites"],
+        "Density": f"{material_summary["density"]:.2f} g·cm⁻³",
+        "Possible Oxidation States": " ".join([format_formula_charge(specie) for specie in material_summary["possible_species"]]),
+    }).children
+
+    print(material_id)
 
     return  material_summary.get("structure"), \
             breadcrumb_items, \
@@ -205,5 +249,8 @@ def update_structure(pathname, search):
             robocrys_block_data, \
             generate_lattice_constants_box(material_summary["structure"]["lattice"]), \
             generate_symmetry_box(material_summary['symmetry_detail']), \
-            generate_atomic_posistions_box(material_summary["wyckoff_sites"])
+            generate_atomic_posistions_box(material_summary["wyckoff_sites"]), \
+            more_details_block, \
+            generate_scrollspy_menu_title(material_id, material_summary['formula_pretty']), \
+            generate_chemical_environment(material_summary['chemical_environment'])
 
