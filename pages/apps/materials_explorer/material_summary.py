@@ -1,13 +1,17 @@
 import dash_mp_components
 import dash
+from pybtex.database.input import bibtex
+
 from dash import dcc, html, Input, Output, callback
 from components.app_header import create_page_header
+from components.bibtex_list import BibList
 from components.data_box import DataBox
 from components.utility_functions import format_formula_charge
 import dash_bootstrap_components as dbc
 import requests
 import crystal_toolkit.components as ctc
 from urllib.parse import urlparse, parse_qs 
+
 
 from crystal_toolkit.helpers.layouts import (
     Box,
@@ -72,7 +76,7 @@ scrollspy_menu = dash_mp_components.Scrollspy(
                      'items': [
                          {'label': 'Summary', 'targetId': 'summary_box'}, 
                          {'label': 'Crystal Structure', 'targetId': 'crystal_structure_details'}, 
-                         {'label': 'Three', 'targetId': 'three'}]}],
+                         {'label': 'Literature References', 'targetId': 'literature_references'}]}],
         menuClassName="menu",
         menuItemContainerClassName="menu-list",
         activeClassName="is-active",
@@ -114,9 +118,9 @@ scrollspy_layout = html.Div(className='scrollspy app-content', children=[
                 html.Div(id="more_details", className="mb-3"),
             ]),
             ]),
-        html.Div(id='two', children=[
-            html.H1('Two'),
-            html.P('lorem ipsum'),
+        html.Div(id='literature_references', children=[
+            html.H3('Literature References'),
+            html.Div(id='literature_list'),
         ]),
         html.Div(id='three', children=[
             html.H1('Three'),
@@ -201,12 +205,15 @@ def generate_chemical_environment(chem_env_data):
     for ce in chem_env_data:
         chem_env_table.append({
                 "Wyckoff": ce['Wyckoff'],
-                "Species": ce['Species'],
+                "Species": format_formula_charge(ce['Species']),
                 "Environment": ce['Environment'],
                 "IUPAC": ce['IUPAC'],
                 "CSM": ce['CSM'],
         })
     return DataBox(title="Chemical Environment", data=chem_env_table).children
+
+def generate_literature_list(literature_references):
+    return BibList(data = literature_references).children
 
 @callback(
     Output(structure_viewer.id(), 'data'),
@@ -219,6 +226,7 @@ def generate_chemical_environment(chem_env_data):
     Output('more_details', 'children'),
     Output('scrollspy_menu_title', 'children'),
     Output('chem_env', 'children'),
+    Output('literature_list', 'children'),
     Input('url', 'pathname'),
     Input('url', 'search')
 )
@@ -241,7 +249,7 @@ def update_structure(pathname, search):
         "Possible Oxidation States": " ".join([format_formula_charge(specie) for specie in material_summary["possible_species"]]),
     }).children
 
-    print(material_id)
+    generate_literature_list(material_summary['literature'])
 
     return  material_summary.get("structure"), \
             breadcrumb_items, \
@@ -252,5 +260,6 @@ def update_structure(pathname, search):
             generate_atomic_posistions_box(material_summary["wyckoff_sites"]), \
             more_details_block, \
             generate_scrollspy_menu_title(material_id, material_summary['formula_pretty']), \
-            generate_chemical_environment(material_summary['chemical_environment'])
+            generate_chemical_environment(material_summary['chemical_environment']), \
+            generate_literature_list(material_summary['literature'])
 
