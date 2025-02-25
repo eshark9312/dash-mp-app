@@ -229,3 +229,11 @@
     color: #333;
     margin-bottom: 1rem;
 }
+
+/*Tab bar styling*/
+.tabs ul.react-tabs__tab-list {
+    margin: 0rem;
+    background-color: #ffffff;
+    border-left: 1px solid grey;
+    border-right: 1px solid grey;
+}

@@ -12,6 +12,9 @@ import requests
 import crystal_toolkit.components as ctc
 from urllib.parse import urlparse, parse_qs 
 
+from dash_mp_components import (
+    Tabs,
+)
 
 from crystal_toolkit.helpers.layouts import (
     Box,
@@ -43,19 +46,17 @@ def get_material_summary(material_id):
     response.raise_for_status()
     return response.json()
 
-
 structure_viewer = ctc.StructureMoleculeComponent(id='ctc_structure_viewer')
 structure_viewer_layout = structure_viewer.layout()
 
 
-
+# app header with breadcrumb
 breadcrumb_items = [
     {"label": "Home", "href": "/", "external_link": True},
     {"label": "Apps", "href": "/apps", "external_link": True},
     {"label": "Materials Explorer", "href": "/materials", "external_link": True},
     {"label": "", "active": True},
 ]
-
 
 breadcrumb = dbc.Breadcrumb(
             items = breadcrumb_items,
@@ -71,18 +72,88 @@ app_header = html.Div([
         html.Div([breadcrumb, page_header], className="app-content")
     ])
 
+# scrollspy_menu
 scrollspy_menu = dash_mp_components.Scrollspy(
         menuGroups=[{'label': 'Table of Contents', 
                      'items': [
                          {'label': 'Summary', 'targetId': 'summary_box'}, 
-                         {'label': 'Crystal Structure', 'targetId': 'crystal_structure_details'}, 
-                         {'label': 'Literature References', 'targetId': 'literature_references'}]}],
+                         {'label': 'Crystal Structure', 'targetId': 'crystal_structure_details'},
+                         {'label': 'Properties', 'targetId': 'property_tabs'},
+                         {'label': 'Literature References', 'targetId': 'literature_references'},
+                         ]}],
         menuClassName="menu",
         menuItemContainerClassName="menu-list",
         activeClassName="is-active",
         offset=-100,
     )
 
+def properties_tab_layout():
+    phase_stability_tab = Tabs(
+        labels=['Thermodynamic Stability'],
+        children=[
+            html.Div([
+                html.H4('Thermodynamic Stability'),
+                Columns([
+                    Column([
+                        html.Div(id='phase_stability_databox')
+                    ]),
+                    Column([dbc.Card([
+                        dbc.CardHeader(
+                            "Major update to the thermodynamic data",
+                            className="text-white bg-primary",
+                            style={"font-size": "1.2rem"}
+                        ),
+                        dbc.CardBody([
+                            html.P([
+                                "The formation energies have now been calculated with the r2SCAN metaGGA functional, which improves the accuracy of reported thermodynamic data. The new scheme is the default source of data on the webpage, but the GGA/GGA+U data is still available via the API."
+                            ]),
+                            html.P([
+                                "To further explore the impact of different mixing schemes of functionals on the phase diagrams, please go to the ",
+                                html.A("Phase Diagram", href="#", className="text-primary"),
+                                " App."
+                            ])
+                        ])
+                    ], className="shadow-sm")])
+                ])
+            ])
+        ],
+        className="ml-0 mb-0"
+    )
+
+    electronic_structure_tab = Tabs(
+        labels=['Electronic Structure', 'Magnetic Properties'],
+        children=[
+            html.Div([
+                html.H4('Electronic Structure'),
+                Columns([
+                    Column([
+                        html.Div(id='electronic_structure_databox')
+                        ]),
+                    Column()
+                ])
+            ]),
+            html.Div([
+                html.H4('Magnetic Properties'),
+                Columns([
+                    Column([
+                        html.Div(id='magnetic_properties_databox')
+                        ]),
+                    Column()
+                ])
+            ]),
+        ]
+    )
+
+    return dbc.Tabs(
+        [
+            dbc.Tab(phase_stability_tab, label="Phase Stability"),
+            dbc.Tab(electronic_structure_tab, label="Electronic Structure"),
+        ],
+        className="ml-0 mb-0"
+    )
+
+
+# main layout
 scrollspy_layout = html.Div(className='scrollspy app-content', children=[
     html.Div(className='menu', children=[
             html.Div(className='mb-3', id='scrollspy_menu_title'),
@@ -118,13 +189,13 @@ scrollspy_layout = html.Div(className='scrollspy app-content', children=[
                 html.Div(id="more_details", className="mb-3"),
             ]),
             ]),
+        html.Div(id='properties_section', children=[
+            html.H3('Properties')
+        ]),
+        properties_tab_layout(),
         html.Div(id='literature_references', children=[
             html.H3('Literature References'),
             html.Div(id='literature_list'),
-        ]),
-        html.Div(id='three', children=[
-            html.H1('Three'),
-            html.P('lorem ipsum'),
         ]),
     ])
     ],)
