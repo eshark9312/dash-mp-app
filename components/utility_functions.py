@@ -2,7 +2,21 @@ from fractions import Fraction
 
 from dash import html
 import re
+from flask import request
 
+def get_api_base_url():
+    """Get the API base URL dynamically based on the current host"""
+    # Get the host from the request
+    host = request.host.split(':')[0]  # Remove port if present
+    
+    # For development
+    if host in ['127.0.0.1', 'localhost']:
+        return "http://127.0.0.1:8000/summary"
+    
+    # For production - use the same host as the app
+
+    print(f"http://{host}:8000/summary")
+    return f"http://{host}:8000/summary"
 
 def format_formula_charge(formula_string: str) -> str:
     """

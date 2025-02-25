@@ -1,13 +1,12 @@
 from typing import List
 import dash_mp_components
 import dash
-from pybtex.database.input import bibtex
 
 from dash import dcc, html, Input, Output, callback
 from components.app_header import create_page_header
 from components.bibtex_list import BibList
 from components.data_box import DataBox
-from components.utility_functions import format_formula_charge, format_chemical_formula, format_decimal_to_fraction
+from components.utility_functions import get_api_base_url, format_formula_charge, format_chemical_formula, format_decimal_to_fraction
 import dash_bootstrap_components as dbc
 import requests
 import crystal_toolkit.components as ctc
@@ -29,10 +28,6 @@ from crystal_toolkit.helpers.layouts import (
     Reveal,
 )
 
-
-API_base_url = "http://127.0.0.1:8000/summary"
-
-
 # Register the page with a dynamic parameter
 dash.register_page(
     __name__,
@@ -43,6 +38,7 @@ dash.register_page(
 )
 
 def get_material_summary(material_id):
+    API_base_url = get_api_base_url()
     response = requests.get(f"{API_base_url}/{material_id}")
     response.raise_for_status()
     return response.json()

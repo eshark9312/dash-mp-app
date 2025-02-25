@@ -77,4 +77,7 @@ def toggle_left_navbar(pathname):
 
 # Run the app
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(
+        host='0.0.0.0', # Accepts connections from any IP
+        port=8050,       # You can change this port
+        debug=True)
