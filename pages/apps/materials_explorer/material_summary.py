@@ -1,3 +1,4 @@
+from typing import List
 import dash_mp_components
 import dash
 from pybtex.database.input import bibtex
@@ -6,7 +7,7 @@ from dash import dcc, html, Input, Output, callback
 from components.app_header import create_page_header
 from components.bibtex_list import BibList
 from components.data_box import DataBox
-from components.utility_functions import format_formula_charge
+from components.utility_functions import format_formula_charge, format_chemical_formula, format_decimal_to_fraction
 import dash_bootstrap_components as dbc
 import requests
 import crystal_toolkit.components as ctc
@@ -78,7 +79,7 @@ scrollspy_menu = dash_mp_components.Scrollspy(
                      'items': [
                          {'label': 'Summary', 'targetId': 'summary_box'}, 
                          {'label': 'Crystal Structure', 'targetId': 'crystal_structure_details'},
-                         {'label': 'Properties', 'targetId': 'property_tabs'},
+                         {'label': 'Properties', 'targetId': 'properties_section'},
                          {'label': 'Literature References', 'targetId': 'literature_references'},
                          ]}],
         menuClassName="menu",
@@ -115,9 +116,10 @@ def properties_tab_layout():
                         ])
                     ], className="shadow-sm")])
                 ])
-            ])
+            ],
+            className="pl-2 pr-2 pb-2"),
         ],
-        className="ml-0 mb-0"
+        className="ml-0 mb-0 border-light-grey"
     )
 
     electronic_structure_tab = Tabs(
@@ -131,7 +133,8 @@ def properties_tab_layout():
                         ]),
                     Column()
                 ])
-            ]),
+            ],
+            className="pl-2 pr-2 pb-2"),
             html.Div([
                 html.H4('Magnetic Properties'),
                 Columns([
@@ -140,8 +143,10 @@ def properties_tab_layout():
                         ]),
                     Column()
                 ])
-            ]),
-        ]
+            ],
+            className="pl-2 pr-2 pb-2"),
+        ],
+        className="ml-0 mb-0 border-light-grey"
     )
 
     return dbc.Tabs(
@@ -154,7 +159,7 @@ def properties_tab_layout():
 
 
 # main layout
-scrollspy_layout = html.Div(className='scrollspy app-content', children=[
+scrollspy_layout = html.Div(className='scrollspy', children=[
     html.Div(className='menu', children=[
             html.Div(className='mb-3', id='scrollspy_menu_title'),
             scrollspy_menu
@@ -196,20 +201,28 @@ scrollspy_layout = html.Div(className='scrollspy app-content', children=[
         html.Div(id='literature_references', children=[
             html.H3('Literature References'),
             html.Div(id='literature_list'),
-        ]),
+            ], 
+            className='mt-3'
+        ),
     ])
     ],)
 
 layout = html.Div([
     app_header, 
     html.Section([
-        scrollspy_layout
+        html.Div([  # Added container div with max-width
+            scrollspy_layout
+        ], style={
+            'maxWidth': '1280px',
+            'width': '100%',
+            'margin': '0 auto',  # Center the container
+        })
     ], style={
         'backgroundColor': '#f5f5f5',
         'display': 'flex',
         'justifyContent': 'center',
         'width': '100%',
-        'padding': '30px'
+        'padding-left': '70px'
     })
     ])
 
@@ -257,17 +270,7 @@ def generate_atomic_posistions_box(wyckoff_sites_data):
 
 def generate_scrollspy_menu_title(mp_id, formula_pretty):
     return [
-        dash_mp_components.DataBlock(
-           columns=[
-              {
-                 'selector': "sample",
-                 'formatType': 'FORMULA',
-              }
-           ],
-           data={
-              "sample": formula_pretty
-           }
-        ),
+        html.Div(format_chemical_formula(formula_pretty), style={"font-size": "2.5rem"}),
         html.Span(mp_id, style={"fontSize":"1.5rem", "fontWeight": 400}), 
         ]
 
@@ -286,6 +289,37 @@ def generate_chemical_environment(chem_env_data):
 def generate_literature_list(literature_references):
     return BibList(data = literature_references).children
 
+def generate_phase_stability_box(thermostability_info):
+    if (thermostability_info['Predicted Stable']):
+        thermostability_info['Predicted Stable'] = html.I(className="fas fa-circle-check fa-lg", style={"color": "green"})
+    else:
+        thermostability_info['Predicted Stable'] = html.I(className="fas fa-circle-xmark fa-lg", style={"color": "red"})
+    
+    if (float(thermostability_info['Energy Above Hull'].split(' ')[0]) > 0):
+        thermostability_info['Energy Above Hull'] = html.Div([
+            html.I(className="fas fa-circle-chevron-up fa-lg", style={"color": "red"}), html.Span('  '),
+            html.Span(thermostability_info['Energy Above Hull'], style={"font-size": "1rem"})
+        ])
+    else:
+        thermostability_info['Energy Above Hull'] = html.Div([
+            html.I(className="fas fa-circle-minus fa-lg", style={"color": "green"}), html.Span('  '),
+            html.Span(thermostability_info['Energy Above Hull'], style={"font-size": "1rem"})
+        ])
+
+    if (isinstance(thermostability_info['Decomposes to'], List)):
+        decompose_to = []
+        for i in range(len(thermostability_info['Decomposes to'])):
+            component = thermostability_info['Decomposes to'][i]
+            decompose_to.append(format_decimal_to_fraction(component['amount']))
+            decompose_to.append(dcc.Link(format_chemical_formula(component['formula']), href=f"/materials/{component['material_id']}", className="text-primary"))
+            if i != len(thermostability_info['Decomposes to']) -1:
+                decompose_to.append(html.Span(' + '))
+        thermostability_info['Decomposes to'] = html.Div(decompose_to, style={"font-size": "1rem"})
+    else:
+        thermostability_info['Decomposes to'] = 'Not predicted to decompose'
+    # return html.Div()
+    return DataBox(data=thermostability_info).children
+
 @callback(
     Output(structure_viewer.id(), 'data'),
     Output('_breadcrumb_explorer', 'items'),
@@ -298,6 +332,7 @@ def generate_literature_list(literature_references):
     Output('scrollspy_menu_title', 'children'),
     Output('chem_env', 'children'),
     Output('literature_list', 'children'),
+    Output('phase_stability_databox', 'children'),
     Input('url', 'pathname'),
     Input('url', 'search')
 )
@@ -332,5 +367,6 @@ def update_structure(pathname, search):
             more_details_block, \
             generate_scrollspy_menu_title(material_id, material_summary['formula_pretty']), \
             generate_chemical_environment(material_summary['chemical_environment']), \
-            generate_literature_list(material_summary['literature'])
+            generate_literature_list(material_summary['literature']), \
+            generate_phase_stability_box(material_summary['thermostability'])
 

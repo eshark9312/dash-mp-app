@@ -234,6 +234,10 @@
 .tabs ul.react-tabs__tab-list {
     margin: 0rem;
     background-color: #ffffff;
-    border-left: 1px solid grey;
-    border-right: 1px solid grey;
+}
+
+.border-light-grey {
+    border-left: 1px solid rgb(230, 230, 230);
+    border-right: 1px solid rgb(230, 230, 230);
+    border-bottom: 1px solid rgb(230, 230, 230);
 }

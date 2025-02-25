@@ -1,13 +1,14 @@
 from dash import html
 import dash_bootstrap_components as dbc
-from typing import Dict, Optional, Union, List
+from typing import Dict, Optional, Union, List, Any
+from dash.development.base_component import Component
 
 class DataBox(html.Div):
     """A component for displaying data in a table format."""
     
     def __init__(
         self,
-        data: Union[Dict[str, str], List[Dict[str, str]]],
+        data: Union[Dict[str, Any], List[Dict[str, Any]]],
         title: Optional[str] = None,
         className: str = "",
         id: Optional[str] = None,
@@ -64,7 +65,7 @@ class DataBox(html.Div):
             id=id if id else f"data-box-{hash(str(data))}"
         )
 
-    def _create_key_value_variant(self, data: Dict[str, str]) -> html.Table:
+    def _create_key_value_variant(self, data: Dict[str, Any]) -> html.Table:
         """Create a key-value pair table."""
         rows = []
         for key, value in data.items():
@@ -81,9 +82,8 @@ class DataBox(html.Div):
                         }
                     ),
                     html.Td(
-                        value,
+                        value if isinstance(value, str) else html.Div(value),
                         style={
-                            'color': '#485fc7',
                             'fontFamily': 'monospace',
                             'borderBottom': '1px solid #eee',
                             'padding': '0.4rem 0',
@@ -101,7 +101,7 @@ class DataBox(html.Div):
             }
         )
 
-    def _create_table_variant(self, data: List[Dict[str, str]]) -> html.Table:
+    def _create_table_variant(self, data: List[Dict[str, Any]]) -> html.Table:
         """Create a table with headers from a list of dictionaries."""
         # Get headers from the first dictionary
         headers = list(data[0].keys())
@@ -124,9 +124,8 @@ class DataBox(html.Div):
         for item in data:
             row = html.Tr([
                 html.Td(
-                    item.get(header, ''),
+                    item.get(header, '') if isinstance(item.get(header, ''), str) else html.Div(item.get(header, '')),
                     style={
-                        'color': '#485fc7',
                         'fontFamily': 'monospace',
                         'borderBottom': '1px solid #eee',
                         'padding': '0.4rem 1rem'
@@ -143,8 +142,14 @@ class DataBox(html.Div):
             }
         )
 
-    def update_data(self, new_data: Union[Dict[str, str], List[Dict[str, str]]], variant: str = "key_value"):
-        """Update the data in the box."""
+    def update_data(self, new_data: Union[Dict[str, Any], List[Dict[str, Any]]], variant: str = "key_value"):
+        """
+        Update the data in the box.
+        
+        Args:
+            new_data: New data to display (dict or list of dicts)
+            variant: Ignored parameter, variant is determined by data type
+        """
         if variant == "table" and isinstance(new_data, list) and len(new_data) > 0:
             table = self._create_table_variant(new_data)
         else:
@@ -155,3 +160,62 @@ class DataBox(html.Div):
             self.children.children = [self.children.children[0], table]
         else:
             self.children.children = [table]
+
+if __name__ == "__main__":
+    # Test data for key-value variant
+    kv_data = {
+        "Name": "John Doe",
+        "Age": 30,
+        "Email": "john@example.com",
+        "Status": html.Span("Active", style={"color": "green"}),
+    }
+
+    # Test data for table variant
+    table_data = [
+        {"ID": 1, "Name": "John Doe", "Department": "Engineering"},
+        {"ID": 2, "Name": "Jane Smith", "Department": "Marketing"},
+        {"ID": 3, "Name": "Bob Wilson", "Department": "Sales"},
+    ]
+
+    # Create test layout
+    test_layout = html.Div([
+        # Key-value variant with title
+        DataBox(
+            data=kv_data,
+            title="User Information",
+            className="mb-4",
+            id="user-info-box"
+        ),
+        
+        # Table variant with title
+        DataBox(
+            data=table_data,
+            title="Employee List",
+            className="mb-4",
+            id="employee-table"
+        ),
+        
+        # Key-value variant without title
+        DataBox(
+            data={"Simple": "Example", "Without": "Title"},
+            className="mb-4"
+        ),
+        
+        # Empty data handling
+        DataBox(
+            data={},
+            title="Empty Data Box",
+            className="mb-4"
+        ),
+    ])
+
+    # If you want to run this as a standalone app
+    from dash import Dash
+    import webbrowser
+    
+    app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+    app.layout = html.Div(test_layout, className="container p-4")
+    
+    if __name__ == "__main__":
+        webbrowser.open('http://127.0.0.1:8059/')
+        app.run_server(debug=True, port=8059)

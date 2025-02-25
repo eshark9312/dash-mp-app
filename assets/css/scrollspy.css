@@ -1,18 +1,21 @@
 .scrollspy {
-	display: inline-block;
+    display: flex;  /* Make container a flex container */
+    gap: 10px;     /* Space between menu and content */
+    position: relative;
 }
 
 .scrollspy .menu {
-	position: fixed;
-	width: 200px;
+    position: sticky;
+    top: 70px;     /* Distance from top when sticky */
+    height: fit-content;
+    width: 250px;  /* Fixed width for menu, adjust as needed */
+    flex-shrink: 0;  /* Prevent menu from shrinking */
 }
 
 .scrollspy .content {
-	display: inline-block;
-	margin-left: 200px;
-	padding-left: 15px;
+    flex: 1;  /* Take remaining space */
+    padding: 20px;
 }
-
 .scrollspy a {
   text-decoration: none;
   color: #000;
