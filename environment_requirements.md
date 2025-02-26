@@ -8,8 +8,6 @@ To run the Materials Project application, ensure you have the following requirem
 ## Required Packages
 You can install the required packages using pip. Here is a list of the necessary packages:
 
-```bash
-pip install dash dash_bootstrap_components
-```
+- crystal_toolkit
 
 ## Database
